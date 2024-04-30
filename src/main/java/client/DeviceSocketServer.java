@@ -17,7 +17,7 @@ import java.net.Socket;
 public class DeviceSocketServer {
     public static void main(String[] args) {
         try {
-            ServerSocket serverSocket = new ServerSocket(1200); // اختر المنفذ
+            ServerSocket serverSocket = new ServerSocket(1100); // اختر المنفذ
             System.out.println("Device Socket Server is running...");
 
             while (true) {

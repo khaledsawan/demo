@@ -15,7 +15,7 @@ public class DeviceSocketClient {
     public static void main(String[] args) {
         try {
             String deviceIP = "127.0.0.1"; // استخدم عنوان IP الفعلي
-            int port = 1200; // المنفذ الذي يتصل به
+            int port = 1099; // المنفذ الذي يتصل به
             try (Socket socket = new Socket(deviceIP, port)) {
                 OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
                 writer.write("Hello from Manager\n");

@@ -2,23 +2,23 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package server;
+package client;
 
 /**
  *
  * @author hornet
  */
-import interfaces.MonitoringService;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.rmi.NotBoundException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+
+import server.MonitoringServiceImpl;
 
 public class RMIClient {
     public static void main(String[] args) {
         try {
-            Registry registry = LocateRegistry.getRegistry("localhost", 1100);
+            Registry registry = LocateRegistry.getRegistry("localhost", 1099);
             MonitoringServiceImpl monitoringService = new MonitoringServiceImpl();
             registry.rebind("MonitoringService", monitoringService);
 
