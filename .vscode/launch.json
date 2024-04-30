@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "SaveImageExample",
+            "request": "launch",
+            "mainClass": "server.SaveImageExample",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "ScreenshotClient",
+            "request": "launch",
+            "mainClass": "client.ScreenshotClient",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
+            "name": "RMIServerStarter",
+            "request": "launch",
+            "mainClass": "server.RMIServerStarter",
+            "projectName": "demo"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

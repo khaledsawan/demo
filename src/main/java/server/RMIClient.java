@@ -18,21 +18,22 @@ import java.rmi.registry.Registry;
 public class RMIClient {
     public static void main(String[] args) {
         try {
-            Registry registry = LocateRegistry.getRegistry("localhost", 1099);
-            MonitoringService service = (MonitoringService) registry.lookup("MonitoringService");
+            Registry registry = LocateRegistry.getRegistry("localhost", 1100);
+            MonitoringServiceImpl monitoringService = new MonitoringServiceImpl();
+            registry.rebind("MonitoringService", monitoringService);
 
-            byte[] cameraImage = service.captureCameraImage();
+            byte[] cameraImage = monitoringService.captureCameraImage();
             try (FileOutputStream fos = new FileOutputStream("camera.jpg")) {
                 fos.write(cameraImage);
             }
 
-            byte[] screenshot = service.captureScreenShot();
+            byte[] screenshot = monitoringService.captureScreenShot();
             try (FileOutputStream fos2 = new FileOutputStream("screenshot.jpg")) {
                 fos2.write(screenshot);
             }
 
             System.out.println("Images saved!");
-        } catch (IOException | NotBoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
