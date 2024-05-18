@@ -1,5 +1,4 @@
-/photos/*
-/screenshots/*
-
-!/photos/.gitkeep
-!/screenshots/.gitkeep
+photos/*
+screenshots/*
+!photos/.gitignore
+!screenshots/.gitignore
