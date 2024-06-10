@@ -10,3 +10,5 @@ public interface Device extends Remote {
     String getDeviceAddress() throws RemoteException;
     void startChat() throws RemoteException; 
 }
+
+

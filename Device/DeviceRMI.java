@@ -17,7 +17,7 @@ public class DeviceRMI {
     public static void main(String[] args) {
         try {
 
-    CentralRegistry centralRegistry = (CentralRegistry) Naming.lookup(CENTRAL_REGISTRY_URL);
+            CentralRegistry centralRegistry = (CentralRegistry) Naming.lookup(CENTRAL_REGISTRY_URL);
             String clientName = "Client" + System.currentTimeMillis(); // Unique identifier for the client
             int port = findAvailablePort();
             String clientRegistryURL = "rmi://localhost:" + port + "/" + clientName;
