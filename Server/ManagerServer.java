@@ -1,24 +1,28 @@
+package Server;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.text.SimpleDateFormat;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import Central.CentralRegistry;
+import Client.Device;
 import java.io.File;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
-public class Manager {
+public class ManagerServer {
     private static BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in)); // Make scanner a class variable
+    private static final String CENTRAL_REGISTRY_URL = "rmi://localhost/CentralRegistry";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, NotBoundException {
         while (true) {
             // Display available devices
             displayDevices();
@@ -39,8 +43,8 @@ public class Manager {
 
             // Connect to selected device
             try {
-                Registry registry = LocateRegistry.getRegistry(selectedDeviceIp);
-                Device device = (Device) registry.lookup(selectedDeviceIp);
+                // Registry registry = LocateRegistry.getRegistry(selectedDeviceIp);
+                Device device = (Device) Naming.lookup(selectedDeviceIp);
 
                 boolean backToDeviceList = false;
                 while (!backToDeviceList) {
@@ -88,37 +92,35 @@ public class Manager {
     }
 
     private static void displayDevices() {
-        try (BufferedReader br = new BufferedReader(new FileReader("devices.txt"))) {
-            String line;
+
+        try {
+            CentralRegistry centralRegistry = (CentralRegistry) Naming.lookup(CENTRAL_REGISTRY_URL);
+            List<String> activeClients = centralRegistry.getActiveClients();
             int deviceCount = 0;
-            System.out.println("Available Devices:");
-            while ((line = br.readLine()) != null) {
+            for (String clientName : activeClients) {
                 deviceCount++;
-                System.out.println(deviceCount + ". " + line);
+                String clientRegistryURL = centralRegistry.getClientRegistryURL(clientName);
+                System.out.println(deviceCount + ": " + clientName + " at " + clientRegistryURL);
             }
-        } catch (IOException e) {
-            System.err.println("Error reading device information: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
-    private static String getDeviceIpByNumber(int number) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("devices.txt"));
-        try {
-            String line;
+    private static String getDeviceIpByNumber(int number) throws IOException, NotBoundException {
+       
+            CentralRegistry centralRegistry = (CentralRegistry) Naming.lookup(CENTRAL_REGISTRY_URL);
+            List<String> activeClients = centralRegistry.getActiveClients();
             int currentNumber = 0;
-            while ((line = br.readLine()) != null) {
+            for (String clientName : activeClients) {
                 currentNumber++;
+                String clientRegistryURL = centralRegistry.getClientRegistryURL(clientName);
                 if (currentNumber == number) {
-                    String[] parts = line.split(": ");
-                    if (parts.length > 1) {
-                        return parts[1];
-                    }
+                    return clientRegistryURL;
                 }
             }
-        } finally {
-            br.close();
-        }
-        throw new IllegalArgumentException("Device not found for number: " + number);
+            throw new IllegalArgumentException("Device not found for number: " + number);
     }
 
     private static void saveImageToFile(String screenshotBase64, String path) {
@@ -127,7 +129,7 @@ public class Manager {
             BufferedImage screenshot = ImageIO.read(new ByteArrayInputStream(screenshotBytes));
 
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            File outputFile = new File(path + "/" + timeStamp + ".png");
+            File outputFile = new File("Server/"+path + "/" + timeStamp + ".png");
             ImageIO.write(screenshot, "png", outputFile);
         } catch (IOException e) {
             System.err.println("Error saving image: " + e.getMessage());
