@@ -1,4 +1,4 @@
-package Client;
+package Device;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.awt.AWTException;

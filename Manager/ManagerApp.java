@@ -1,4 +1,4 @@
-package Server;
+package Manager;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,13 +12,14 @@ import java.text.SimpleDateFormat;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import Central.CentralRegistry;
-import Client.Device;
+import Device.Device;
+
 import java.io.File;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-public class ManagerServer {
+public class ManagerApp {
     private static BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in)); // Make scanner a class variable
     private static final String CENTRAL_REGISTRY_URL = "rmi://localhost/CentralRegistry";
 
@@ -129,7 +130,7 @@ public class ManagerServer {
             BufferedImage screenshot = ImageIO.read(new ByteArrayInputStream(screenshotBytes));
 
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-            File outputFile = new File("Server/"+path + "/" + timeStamp + ".png");
+            File outputFile = new File("Manager/"+path + "/" + timeStamp + ".png");
             ImageIO.write(screenshot, "png", outputFile);
         } catch (IOException e) {
             System.err.println("Error saving image: " + e.getMessage());

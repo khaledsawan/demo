@@ -4,7 +4,7 @@ package Central;
 import java.rmi.Naming;
 import java.rmi.registry.LocateRegistry;
 
-public class CentralRegistryServer {
+public class CentralRegistryRMI {
     public static void main(String[] args) {
         try {
             CentralRegistryImpl centralRegistry = new CentralRegistryImpl();

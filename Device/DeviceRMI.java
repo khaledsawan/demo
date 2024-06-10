@@ -1,15 +1,13 @@
-package Client;
+package Device;
 import org.opencv.core.Core;
 import Central.CentralRegistry;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.net.ServerSocket;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-public class DeviceServer {
+public class DeviceRMI {
     static {
         // Load the native OpenCV library
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
@@ -51,17 +49,6 @@ public class DeviceServer {
         }
     }
 
-    private static void writeDeviceInfoToFile(String ipAddress) {
-        try {
-            FileWriter fileWriter = new FileWriter("devices.txt", true); // Append to file
-            PrintWriter printWriter = new PrintWriter(fileWriter);
-            printWriter.println("Device IP: " + ipAddress);
-            printWriter.close();
-            System.out.println("Device information written to file");
-        } catch (Exception e) {
-            System.err.println("Error writing device information to file: " + e.getMessage());
-        }
-    }
 
     public static int findAvailablePort() {
         for (int port = 49152; port <= 65535; port++) { // Range for dynamic/private ports

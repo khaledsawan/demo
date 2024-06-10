@@ -1,4 +1,4 @@
-Server/photos/*
-Server/screenshots/*
-!Server/photos/.gitignore
-!Server/screenshots/.gitignore
+Manager/photos/*
+Manager/screenshots/*
+!Manager/photos/.gitignore
+!Manager/screenshots/.gitignore

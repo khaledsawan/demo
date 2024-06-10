@@ -1,4 +1,4 @@
-package Client;
+package Device;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Base64;
@@ -58,7 +58,7 @@ public class DeviceImpl extends UnicastRemoteObject implements Device {
         new Thread(() -> {
             try {
                 Socket socket = new Socket("localhost", 8080);
-                System.out.println("Monitor Wants To Chat you !!");
+                System.out.println("Manager Wants To Chat you !!");
                 OutputStream outputStream = socket.getOutputStream();
                 
                 BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
