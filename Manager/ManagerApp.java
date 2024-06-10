@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 public class ManagerApp {
-    private static BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in)); // Make scanner a class variable
+    private static BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
     private static final String CENTRAL_REGISTRY_URL = "rmi://localhost/CentralRegistry";
 
     public static void main(String[] args) throws IOException, NotBoundException {
