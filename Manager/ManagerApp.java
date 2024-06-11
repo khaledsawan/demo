@@ -49,8 +49,6 @@ public class ManagerApp {
             
             // Connect to selected device
             try {
-                // Registry registry = LocateRegistry.getRegistry(selectedDeviceIp);
-      
 
                 boolean backToDeviceList = false;
                 while (!backToDeviceList) {

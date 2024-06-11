@@ -20,28 +20,27 @@ public class DeviceRMI {
 
     public static void main(String[] args) {
         try {
-            Registry registry = LocateRegistry.getRegistry(CENTRAL_REGISTRY_IP, CENTRAL_REGISTRY_PORT);
-            CentralRegistry centralRegistry = (CentralRegistry) Naming.lookup(CENTRAL_REGISTRY_NAME);
+
+            
             String clientName = "Client" + System.currentTimeMillis(); // Unique identifier for the client
             int port = findAvailablePort();
+            String deviceIp = "127.0.0.2"+":"+port;
             
-            String deviceIp = "127.0.0.1"+":"+port;
-            
-            // String clientRegistryURL = "rmi://localhost:" + port + "/" + clientName;
-
             // Register the client with the central registry
-            centralRegistry.registerClient(clientName, deviceIp);
+            Registry centralRegistry = LocateRegistry.getRegistry(CENTRAL_REGISTRY_IP, CENTRAL_REGISTRY_PORT);
+            CentralRegistry central = (CentralRegistry) centralRegistry.lookup(CENTRAL_REGISTRY_NAME);
+            central.registerClient(clientName, deviceIp);
             System.out.println("Client registered: " + clientName);
 
             // Start the client's RMI registry and bind some service
-            registry = LocateRegistry.createRegistry(port);
+            Registry registry = LocateRegistry.createRegistry(port);
             Device clientService = new DeviceImpl();
             registry.rebind(clientName, clientService);
 
             // On shutdown, deregister the client
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 try {
-                    centralRegistry.deregisterClient(clientName);
+                    central.deregisterClient(clientName);
                     System.out.println("Client deregistered: " + clientName);
                 } catch (RemoteException e) {
                     e.printStackTrace();
