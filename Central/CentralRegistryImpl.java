@@ -15,8 +15,8 @@ public class CentralRegistryImpl extends UnicastRemoteObject implements CentralR
     }
 
     @Override
-    public synchronized void registerClient(String clientName, String clientRegistryURL) throws RemoteException {
-        clientRegistryMap.put(clientName, clientRegistryURL);
+    public synchronized void registerClient(String clientName, String ip) throws RemoteException {
+        clientRegistryMap.put(clientName, ip);
     }
 
     @Override

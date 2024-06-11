@@ -19,11 +19,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 
 public class DeviceImpl extends UnicastRemoteObject implements Device {
-    private String deviceAddress;
 
-    public DeviceImpl(String deviceAddress) throws RemoteException {
+    public DeviceImpl() throws RemoteException {
         super();
-         this.deviceAddress = deviceAddress;
+        //  this.deviceAddress = deviceAddress;
     }
     
 
@@ -120,9 +119,9 @@ public class DeviceImpl extends UnicastRemoteObject implements Device {
     }
 
 
-    public String getDeviceAddress() throws RemoteException {
-        return deviceAddress;
-    }
+    // public String getDeviceAddress() throws RemoteException {
+    //     return deviceAddress;
+    // }
 
 
 }

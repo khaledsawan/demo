@@ -7,7 +7,7 @@ import java.io.IOException;
 public interface Device extends Remote {
     String captureImage() throws RemoteException, AWTException, IOException;
     String captureScreenshot() throws RemoteException, AWTException, IOException;
-    String getDeviceAddress() throws RemoteException;
+    // String getDeviceAddress() throws RemoteException;
     void startChat() throws RemoteException; 
 }
 

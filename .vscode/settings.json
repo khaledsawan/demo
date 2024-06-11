@@ -1,6 +1,6 @@
 {
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "Client/libs/opencv-490.jar"
+        "Device/libs/opencv-490.jar"
     ]
 }

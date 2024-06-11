@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.text.SimpleDateFormat;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -21,7 +23,10 @@ import java.util.List;
 
 public class ManagerApp {
     private static BufferedReader scanner = new BufferedReader(new InputStreamReader(System.in));
-    private static final String CENTRAL_REGISTRY_URL = "rmi://localhost/CentralRegistry";
+    
+    private static final String CENTRAL_REGISTRY_IP = "localhost";
+    private static final Integer CENTRAL_REGISTRY_PORT = 1099;
+    private static final String CENTRAL_REGISTRY_NAME = "CentralRegistry";
 
     public static void main(String[] args) throws IOException, NotBoundException {
         while (true) {
@@ -40,12 +45,12 @@ public class ManagerApp {
 
             if (selectedDeviceNumber == 0) continue;
 
-            String selectedDeviceIp = getDeviceIpByNumber(selectedDeviceNumber);
-
+            Device device = getDeviceIpByNumber(selectedDeviceNumber);
+            
             // Connect to selected device
             try {
                 // Registry registry = LocateRegistry.getRegistry(selectedDeviceIp);
-                Device device = (Device) Naming.lookup(selectedDeviceIp);
+      
 
                 boolean backToDeviceList = false;
                 while (!backToDeviceList) {
@@ -95,7 +100,8 @@ public class ManagerApp {
     private static void displayDevices() {
 
         try {
-            CentralRegistry centralRegistry = (CentralRegistry) Naming.lookup(CENTRAL_REGISTRY_URL);
+            Registry registry = LocateRegistry.getRegistry(CENTRAL_REGISTRY_IP, CENTRAL_REGISTRY_PORT);
+            CentralRegistry centralRegistry = (CentralRegistry) registry.lookup(CENTRAL_REGISTRY_NAME);
             List<String> activeClients = centralRegistry.getActiveClients();
             int deviceCount = 0;
             for (String clientName : activeClients) {
@@ -109,16 +115,31 @@ public class ManagerApp {
 
     }
 
-    private static String getDeviceIpByNumber(int number) throws IOException, NotBoundException {
+    private static Device getDeviceIpByNumber(int number) throws IOException, NotBoundException {
        
-            CentralRegistry centralRegistry = (CentralRegistry) Naming.lookup(CENTRAL_REGISTRY_URL);
+            Registry registry = LocateRegistry.getRegistry(CENTRAL_REGISTRY_IP, CENTRAL_REGISTRY_PORT);
+            CentralRegistry centralRegistry = (CentralRegistry) registry.lookup(CENTRAL_REGISTRY_NAME);
             List<String> activeClients = centralRegistry.getActiveClients();
             int currentNumber = 0;
             for (String clientName : activeClients) {
                 currentNumber++;
-                String clientRegistryURL = centralRegistry.getClientRegistryURL(clientName);
+                
+                
                 if (currentNumber == number) {
-                    return clientRegistryURL;
+                    String ip = centralRegistry.getClientRegistryURL(clientName);
+
+                     // Split the string by the colon character ":"
+                    String[] parts = ip.split(":");
+                    
+                    
+                    // Extract the IP address and port number
+                    String ipAddress = parts[0];
+                    Integer portNumber = Integer.parseInt(parts[1]);
+                    System.out.println(ipAddress+" " + portNumber);
+                    Registry deviceRegistry = LocateRegistry.getRegistry(ipAddress, portNumber);
+                    Device device = (Device) deviceRegistry.lookup(clientName);
+                    
+                    return device;
                 }
             }
             throw new IllegalArgumentException("Device not found for number: " + number);
