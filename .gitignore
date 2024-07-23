@@ -1,0 +1,4 @@
+Manager/photos/*
+Manager/screenshots/*
+!Manager/photos/.gitignore
+!Manager/screenshots/.gitignore
